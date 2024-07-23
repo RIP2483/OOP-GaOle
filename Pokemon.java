@@ -63,7 +63,7 @@ public class Pokemon {
         this.speed = speed;
     }
 
-    public void attack(Pokemon enemy) {
+    public void attack(String move) {
         int damage = this.attack - enemy.getDefense();
         if (damage < 0) {
             damage = 0;
