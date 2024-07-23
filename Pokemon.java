@@ -1,30 +1,30 @@
+import java.util.List;
+
 public class Pokemon {
     private String name;
-    private String type;
-    private int hp;
+    private int health;
+    private int maxHealth;
     private int attack;
     private int defense;
     private int speed;
-    
-    public Pokemon(String name, String type, int hp, int attack, int defense, int speed) {
+    private List<Move> moves;
+
+    public Pokemon(String name, int health, int attack, int defense, int speed, List<Move> moves) {
         this.name = name;
-        this.type = type;
-        this.hp = hp;
+        this.health = health;
+        this.maxHealth = health;
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
+        this.moves = moves;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public int getHp() {
-        return hp;
+    public int getHealth() {
+        return health;
     }
 
     public int getAttack() {
@@ -39,16 +39,16 @@ public class Pokemon {
         return speed;
     }
 
+    public List<Move> getMoves() {
+        return moves;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setHp(int hp) {
-        this.hp = hp;
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     public void setAttack(int attack) {
@@ -63,15 +63,26 @@ public class Pokemon {
         this.speed = speed;
     }
 
-    public void attack(Pokemon enemy) {
-        int damage = this.attack - enemy.getDefense();
-        if (damage < 0) {
-            damage = 0;
+    public void setMoves(List<Move> moves) {
+        this.moves = moves;
+    }
+
+    public void takeDamage(int damage) {
+        health -= damage;
+        if (health < 0) {
+            health = 0;
         }
-        enemy.setHp(enemy.getHp() - damage);
+    }
+
+    public void heal() {
+        health = maxHealth;
     }
 
     public boolean isFainted() {
-        return this.hp == 0;
+        return health <= 0;
+    }
+
+    public void addMove(Move move) {
+        this.moves.add(move);
     }
 }
