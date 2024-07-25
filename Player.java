@@ -31,10 +31,10 @@ public class Player {
 
     public void ViewCapturedPokemon() {
         if (pokemonList.isEmpty()) {
-            System.out.println("You have not captured any Pokemon yet.");
+            TextUtils.printWithDelay("You have not captured any Pokemon yet.");
         }
         else {
-            System.out.println("Captured Pokemon: ");
+            TextUtils.printWithDelay("Captured Pokemon: ");
             for (Pokemon pokemon : pokemonList) {
                 System.out.println(pokemon.getName());
             }
@@ -42,12 +42,33 @@ public class Player {
     }
 
     public int SelectPokemon() {
-        System.out.println("Choose your Pokemon: ");
+        TextUtils.printWithDelay("Choose your Pokemon (or enter 0 to return to the menu): ");
         for (int i = 0; i < pokemonList.size(); i++) {
-            System.out.println(i + 1 + ". " + pokemonList.get(i).getName());
+            System.out.println((i + 1) + ". " + pokemonList.get(i).getName());
         }
-        int choice = scanner.nextInt();
-        int index = choice - 1;
-        return index;
+
+        int choice = -1;
+        while (true) {
+            try {
+                choice = scanner.nextInt();
+                if (choice == 0) {
+                    TextUtils.printWithDelay("Returning to the menu...");
+                    Game.displayMenu();
+                }
+                if (choice < 1 || choice > pokemonList.size()) {
+                    TextUtils.printWithDelay("Invalid choice. Please choose a number between 1 and " + pokemonList.size() + " or 0 to return to the menu.");
+                    continue;
+                }
+                int index = choice - 1;
+                if (pokemonList.get(index).getHealth() == 0) {
+                    TextUtils.printWithDelay("This Pokemon has fainted. Please choose another Pokemon.");
+                    continue;
+                }
+                return index;
+            } catch (Exception e) {
+                TextUtils.printWithDelay("Invalid input. Please enter a number.");
+                scanner.next();
+            }
+        }
     }
 }
