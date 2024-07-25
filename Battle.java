@@ -18,18 +18,32 @@ public class Battle {
     public void start() {
         TextUtils.printWithDelay("Battle start!");
         TextUtils.printWithDelay(playerPokemon.getName() + " vs " + opponentPokemon.getName());
-
+    
         while (!playerPokemon.isFainted() && !opponentPokemon.isFainted()) {
             playerTurn();
             if (opponentPokemon.isFainted()) {
                 TextUtils.printWithDelay(opponentPokemon.getName() + " fainted! " + playerPokemon.getName() + " wins!");
                 return;
             }
-
+    
+            try {
+                Thread.sleep(1000); // Used to make a delay bw moves, DONT FORGET
+            } catch (InterruptedException e) {
+                System.out.println("Battle interrupted!");
+                Thread.currentThread().interrupt(); // Restore interrupted status
+            }
+    
             opponentTurn();
             if (playerPokemon.isFainted()) {
                 TextUtils.printWithDelay(playerPokemon.getName() + " fainted! " + opponentPokemon.getName() + " wins!");
                 return;
+            }
+    
+            try {
+                Thread.sleep(1000); // 1-second delay between moves
+            } catch (InterruptedException e) {
+                System.out.println("Battle interrupted!");
+                Thread.currentThread().interrupt(); // Restore interrupted status
             }
         }
     }
@@ -55,9 +69,12 @@ public class Battle {
         double effectiveness = TypeEffectiveness.getEffectiveness(move.getType(), defender.getType());
         int damage = calculateDamage(move.getPower(), attacker.getAttack(), defender.getDefense(), effectiveness);
         TextUtils.printWithDelay(attacker.getName() + " used " + move.getName() + "!");
+        System.out.println("");
         TextUtils.printWithDelay("It's " + getEffectivenessString(effectiveness) + " effective!");
+        System.out.println("");
         defender.takeDamage(damage);
         TextUtils.printWithDelay(defender.getName() + " took " + damage + " damage!");
+        System.out.println("");
     }
 
     private int calculateDamage(int power, int attack, int defense, double effectiveness) {
