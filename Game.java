@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -32,7 +33,8 @@ public class Game {
         System.out.println("1. Catch Pokémon");
         System.out.println("2. Battle");
         System.out.println("3. View captured Pokémon");
-        System.out.println("4. Exit");
+        System.out.println("4. Settings");
+        System.out.println("5. Exit");
     }
 
     public static void displayMenu() {
@@ -51,6 +53,9 @@ public class Game {
                 player.ViewCapturedPokemon();
                 break;
             case 4:
+                textSpeed();
+                break;
+            case 5:
                 System.out.println("Thanks for playing!");
                 System.exit(0);
                 break;
@@ -61,46 +66,46 @@ public class Game {
 
     private void catchPokemon() {
         Pokemon wildPokemon = getRandomPokemon();
-        TextUtils.printWithDelay("A wild " + wildPokemon.getName() + " appeared!", 50);
+        TextUtils.printWithDelay("A wild " + wildPokemon.getName() + " appeared!");
 
-        TextUtils.printWithDelay("Throw a Pokéball? (yes/no)", 50);
+        TextUtils.printWithDelay("Throw a Pokéball? (yes/no)");
         String choice = scanner.next();
         if (choice.equalsIgnoreCase("yes")) {
             if (wildPokemon.getGrade() == 0) {
                 if (random.nextInt(100) < 90) {  // 90% chance to catch
                     player.addPokemon(wildPokemon);
-                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!", 50);
+                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!");
                 } else {
-                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!", 50);
+                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!");
                 }
             } else if (wildPokemon.getGrade() == 1) {
                 if (random.nextInt(100) < 70) {  // 70% chance to catch
                     player.addPokemon(wildPokemon);
-                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!", 50);
+                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!");
                 } else {
-                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!", 50);
+                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!");
                 }
             } else if (wildPokemon.getGrade() == 2) {
                 if (random.nextInt(100) < 50) {  // 50% chance to catch
                     player.addPokemon(wildPokemon);
-                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!", 50);
+                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!");
                 } else {
-                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!", 50);
+                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!");
                 }
             }
         } else {
-            TextUtils.printWithDelay("You ran away safely.", 50);
+            TextUtils.printWithDelay("You ran away safely.");
         }
     }
 
     private void battle() {
         if (player.getPokemonList().isEmpty()) {
-            TextUtils.printWithDelay("You don't have any Pokémon to battle with!", 50);
+            TextUtils.printWithDelay("You don't have any Pokémon to battle with!");
             return;
         }
 
         Pokemon opponent = getRandomPokemon();
-        TextUtils.printWithDelay("A wild " + opponent.getName() + " appeared!", 50);
+        TextUtils.printWithDelay("A wild " + opponent.getName() + " appeared!");
 
         Battle battle = new Battle(opponent, player);
         battle.start();
@@ -126,5 +131,32 @@ public class Game {
             }
         }
         return pokemon;
+    }
+
+    private void textSpeed() {
+        TextUtils.printWithDelay("What speed would you like the text to display at?");
+        System.out.println("1. Slow");
+        System.out.println("2. Normal");
+        System.out.println("3. Fast");
+        int choice = scanner.nextInt();
+
+        try {
+            switch (choice) {
+                case 1:
+                    TextUtils.setDelay(50);
+                    break;
+                case 2:
+                TextUtils.setDelay(30);
+                    break;
+                case 3:
+                    TextUtils.setDelay(10);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } catch (InputMismatchException e) {
+        System.out.println("Invalid input. Please enter a number.");
+        scanner.next();
+        }
     }
 }
