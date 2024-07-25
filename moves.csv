@@ -1,10 +1,10 @@
-Flamethrower,90
-Aqua Jet,40
-Leaf Blade,70
-Volt Tackle,120
-Earthquake,100
-Acrobatics,90
-Ice Beam,90
-Shadow Ball,80
-Hyper Beam,150
-Dragon Claw,80
+tackle,40,Normal
+Aqua Jet,40,Water
+Leaf Blade,70,Grass
+thundershock,60,Electric
+ember,60,Fire
+scratch,40,Normal
+vine whip,50,Grass
+bubble beam,60,Water
+pound,80,Normal
+Dragon Claw,80,Dragon
