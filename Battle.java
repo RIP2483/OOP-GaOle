@@ -2,13 +2,16 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Battle {
-    private Pokemon playerPokemon;
+    private Player player;
     private Pokemon opponentPokemon;
     private Scanner scanner;
+    private Pokemon playerPokemon;
 
-    public Battle(Pokemon playerPokemon, Pokemon opponentPokemon) {
-        this.playerPokemon = playerPokemon;
+    public Battle(Pokemon opponentPokemon, Player player) {
         this.opponentPokemon = opponentPokemon;
+        this.player = player;
+        int pokemonIndex = player.SelectPokemon();
+        this.playerPokemon = player.getPokemonList().get(pokemonIndex);
         this.scanner = new Scanner(System.in);
     }
 
@@ -49,9 +52,25 @@ public class Battle {
     }
 
     private void useMove(Pokemon attacker, Pokemon defender, Move move) {
-        int damage = (attacker.getAttack() * move.getPower()) / defender.getDefense();
+        double effectiveness = TypeEffectiveness.getEffectiveness(move.getType(), defender.getType());
+        int damage = calculateDamage(move.getPower(), attacker.getAttack(), defender.getDefense(), effectiveness);
         System.out.println(attacker.getName() + " used " + move.getName() + "!");
+        System.out.println("It's " + getEffectivenessString(effectiveness) + " effective!");
         defender.takeDamage(damage);
         System.out.println(defender.getName() + " took " + damage + " damage!");
+    }
+
+    private int calculateDamage(int power, int attack, int defense, double effectiveness) {
+        return (int) (((2 * 50 / 5 + 2) * power * attack / defense / 50 + 2) * effectiveness);
+    }
+
+    private String getEffectivenessString(double effectiveness) {
+        if (effectiveness > 1) {
+            return "super";
+        } else if (effectiveness < 1) {
+            return "not very";
+        } else {
+            return "normally";
+        }
     }
 }
