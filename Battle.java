@@ -40,10 +40,10 @@ public class Battle {
             }
     
             try {
-                Thread.sleep(1000); // 1-second delay between moves
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.out.println("Battle interrupted!");
-                Thread.currentThread().interrupt(); // Restore interrupted status
+                Thread.currentThread().interrupt();
             }
         }
     }
