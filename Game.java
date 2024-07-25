@@ -30,6 +30,7 @@ public class Game {
     }
 
     private static void showMenu() {
+        System.out.println("-----------------------------------------------------------------------");
         System.out.println("1. Catch Pokémon");
         System.out.println("2. Battle");
         System.out.println("3. View captured Pokémon");
