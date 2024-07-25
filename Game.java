@@ -111,7 +111,7 @@ public class Game {
         Pokemon pokemon = new Pokemon(wildPokemon.getId(), wildPokemon.getName(), wildPokemon.getType(), wildPokemon.getHealth(), wildPokemon.getAttack(), wildPokemon.getDefense(), wildPokemon.getSpeed(), wildPokemon.getGrade(), new ArrayList<>());
 
         // Assign type based moves, I hated doing this part
-        for (int i = 0; i < 2; i++) { // assign 2 moves
+        for (int i = 0; i < 3; i++) { // assign 3 moves
             int choice = random.nextInt(moveList.size());
             if (moveList.get(choice).getType().equals(wildPokemon.getType()) || moveList.get(choice).getType().equals("Normal")) {
                 pokemon.addMove(moveList.get(choice));
