@@ -1,76 +1,125 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Battle {
+public class Game {
     private Player player;
-    private Pokemon opponentPokemon;
     private Scanner scanner;
-    private Pokemon playerPokemon;
+    private Random random;
+    private List<Pokemon> wildPokemonList;
+    private List<Move> moveList;
 
-    public Battle(Pokemon opponentPokemon, Player player) {
-        this.opponentPokemon = opponentPokemon;
+    public Game(Player player, List<Pokemon> wildPokemonList, List<Move> moveList) {
         this.player = player;
-        int pokemonIndex = player.SelectPokemon();
-        this.playerPokemon = player.getPokemonList().get(pokemonIndex);
         this.scanner = new Scanner(System.in);
+        this.random = new Random();
+        this.wildPokemonList = wildPokemonList;
+        this.moveList = moveList;
     }
 
     public void start() {
-        System.out.println("Battle start!");
-        System.out.println(playerPokemon.getName() + " vs " + opponentPokemon.getName());
+        System.out.println("Welcome to Pokémon Ga-Olé!");
 
-        while (!playerPokemon.isFainted() && !opponentPokemon.isFainted()) {
-            playerTurn();
-            if (opponentPokemon.isFainted()) {
-                System.out.println(opponentPokemon.getName() + " fainted! " + playerPokemon.getName() + " wins!");
-                return;
-            }
-
-            opponentTurn();
-            if (playerPokemon.isFainted()) {
-                System.out.println(playerPokemon.getName() + " fainted! " + opponentPokemon.getName() + " wins!");
-                return;
-            }
+        while (true) {
+            showMenu();
+            int choice = scanner.nextInt();
+            handleMenuChoice(choice);
         }
     }
 
-    private void playerTurn() {
-        System.out.println("Choose a move:");
-        for (int i = 0; i < playerPokemon.getMoves().size(); i++) {
-            System.out.println((i + 1) + ". " + playerPokemon.getMoves().get(i).getName());
+    private void showMenu() {
+        System.out.println("1. Catch Pokémon");
+        System.out.println("2. Battle");
+        System.out.println("3. View captured Pokémon");
+        System.out.println("4. Exit");
+    }
+
+    private void handleMenuChoice(int choice) {
+        switch (choice) {
+            case 1:
+                catchPokemon();
+                break;
+            case 2:
+                battle();
+                break;
+            case 3:
+                player.ViewCapturedPokemon();
+                break;
+            case 4:
+                System.out.println("Thanks for playing!");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
         }
-        int choice = scanner.nextInt();
-        Move move = playerPokemon.getMoves().get(choice - 1);
-        useMove(playerPokemon, opponentPokemon, move);
     }
 
-    private void opponentTurn() {
-        Random random = new Random();
-        int choice = random.nextInt(opponentPokemon.getMoves().size());
-        Move move = opponentPokemon.getMoves().get(choice);
-        useMove(opponentPokemon, playerPokemon, move);
-    }
+    private void catchPokemon() {
+        Pokemon wildPokemon = getRandomPokemon();
+        System.out.println("A wild " + wildPokemon.getName() + " appeared!");
 
-    private void useMove(Pokemon attacker, Pokemon defender, Move move) {
-        double effectiveness = TypeEffectiveness.getEffectiveness(move.getType(), defender.getType());
-        int damage = calculateDamage(move.getPower(), attacker.getAttack(), defender.getDefense(), effectiveness);
-        System.out.println(attacker.getName() + " used " + move.getName() + "!");
-        System.out.println("It's " + getEffectivenessString(effectiveness) + " effective!");
-        defender.takeDamage(damage);
-        System.out.println(defender.getName() + " took " + damage + " damage!");
-    }
-
-    private int calculateDamage(int power, int attack, int defense, double effectiveness) {
-        return (int) (((2 * 50 / 5 + 2) * power * attack / defense / 50 + 2) * effectiveness);
-    }
-
-    private String getEffectivenessString(double effectiveness) {
-        if (effectiveness > 1) {
-            return "super";
-        } else if (effectiveness < 1) {
-            return "not very";
+        System.out.println("Throw a Pokéball? (yes/no)");
+        String choice = scanner.next();
+        if (choice.equalsIgnoreCase("yes")) {
+            if (wildPokemon.getGrade() == 0) {
+                if (random.nextInt(100) < 90) {  // 90% chance to catch
+                    player.addPokemon(wildPokemon);
+                    System.out.println("You caught a " + wildPokemon.getName() + "!");
+                } else {
+                    System.out.println("Oh no! The " + wildPokemon.getName() + " broke free!");
+                }
+            } else if (wildPokemon.getGrade() == 1) {
+                if (random.nextInt(100) < 70) {  // 70% chance to catch
+                    player.addPokemon(wildPokemon);
+                    System.out.println("You caught a " + wildPokemon.getName() + "!");
+                } else {
+                    System.out.println("Oh no! The " + wildPokemon.getName() + " broke free!");
+                }
+            } else if (wildPokemon.getGrade() == 2) {
+                if (random.nextInt(100) < 50) {  // 50% chance to catch
+                    player.addPokemon(wildPokemon);
+                    System.out.println("You caught a " + wildPokemon.getName() + "!");
+                } else {
+                    System.out.println("Oh no! The " + wildPokemon.getName() + " broke free!");
+                }
+            }
         } else {
-            return "normally";
+            System.out.println("You ran away safely.");
         }
+    }
+
+    private void battle() {
+        if (player.getPokemonList().isEmpty()) {
+            System.out.println("You don't have any Pokémon to battle with!");
+            return;
+        }
+
+        Pokemon opponent = getRandomPokemon();
+        System.out.println("A wild " + opponent.getName() + " appeared!");
+
+        Battle battle = new Battle(opponent, player);
+        battle.start();
+    }
+
+    private Pokemon getRandomPokemon() {
+        int index = random.nextInt(wildPokemonList.size());
+        Pokemon wildPokemon = wildPokemonList.get(index);
+        if (wildPokemon.getGrade() == 0) {
+        
+        }
+        Pokemon pokemon = new Pokemon(wildPokemon.getId(), wildPokemon.getName(), wildPokemon.getType(), wildPokemon.getHealth(), wildPokemon.getAttack(), wildPokemon.getDefense(), wildPokemon.getSpeed(), wildPokemon.getGrade(), new ArrayList<>());
+
+        // Assign type based moves
+        for (int i = 0; i < 2; i++) { // assign 2 moves
+            int choice = random.nextInt(moveList.size());
+            if (moveList.get(choice).getType().equals(wildPokemon.getType()) || moveList.get(choice).getType().equals("Normal")) {
+                pokemon.addMove(moveList.get(choice));
+            }
+            else {
+                i--;
+            }
+        }
+        return pokemon;
     }
 }
