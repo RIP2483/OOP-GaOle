@@ -28,11 +28,15 @@ public class Game {
         }
     }
 
-    private void showMenu() {
+    private static void showMenu() {
         System.out.println("1. Catch Pokémon");
         System.out.println("2. Battle");
         System.out.println("3. View captured Pokémon");
         System.out.println("4. Exit");
+    }
+
+    public static void displayMenu() {
+        showMenu();
     }
 
     private void handleMenuChoice(int choice) {
@@ -57,46 +61,46 @@ public class Game {
 
     private void catchPokemon() {
         Pokemon wildPokemon = getRandomPokemon();
-        System.out.println("A wild " + wildPokemon.getName() + " appeared!");
+        TextUtils.printWithDelay("A wild " + wildPokemon.getName() + " appeared!", 50);
 
-        System.out.println("Throw a Pokéball? (yes/no)");
+        TextUtils.printWithDelay("Throw a Pokéball? (yes/no)", 50);
         String choice = scanner.next();
         if (choice.equalsIgnoreCase("yes")) {
             if (wildPokemon.getGrade() == 0) {
                 if (random.nextInt(100) < 90) {  // 90% chance to catch
                     player.addPokemon(wildPokemon);
-                    System.out.println("You caught a " + wildPokemon.getName() + "!");
+                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!", 50);
                 } else {
-                    System.out.println("Oh no! The " + wildPokemon.getName() + " broke free!");
+                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!", 50);
                 }
             } else if (wildPokemon.getGrade() == 1) {
                 if (random.nextInt(100) < 70) {  // 70% chance to catch
                     player.addPokemon(wildPokemon);
-                    System.out.println("You caught a " + wildPokemon.getName() + "!");
+                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!", 50);
                 } else {
-                    System.out.println("Oh no! The " + wildPokemon.getName() + " broke free!");
+                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!", 50);
                 }
             } else if (wildPokemon.getGrade() == 2) {
                 if (random.nextInt(100) < 50) {  // 50% chance to catch
                     player.addPokemon(wildPokemon);
-                    System.out.println("You caught a " + wildPokemon.getName() + "!");
+                    TextUtils.printWithDelay("You caught a " + wildPokemon.getName() + "!", 50);
                 } else {
-                    System.out.println("Oh no! The " + wildPokemon.getName() + " broke free!");
+                    TextUtils.printWithDelay("Oh no! The " + wildPokemon.getName() + " broke free!", 50);
                 }
             }
         } else {
-            System.out.println("You ran away safely.");
+            TextUtils.printWithDelay("You ran away safely.", 50);
         }
     }
 
     private void battle() {
         if (player.getPokemonList().isEmpty()) {
-            System.out.println("You don't have any Pokémon to battle with!");
+            TextUtils.printWithDelay("You don't have any Pokémon to battle with!", 50);
             return;
         }
 
         Pokemon opponent = getRandomPokemon();
-        System.out.println("A wild " + opponent.getName() + " appeared!");
+        TextUtils.printWithDelay("A wild " + opponent.getName() + " appeared!", 50);
 
         Battle battle = new Battle(opponent, player);
         battle.start();
@@ -110,10 +114,11 @@ public class Game {
         }
         Pokemon pokemon = new Pokemon(wildPokemon.getId(), wildPokemon.getName(), wildPokemon.getType(), wildPokemon.getHealth(), wildPokemon.getAttack(), wildPokemon.getDefense(), wildPokemon.getSpeed(), wildPokemon.getGrade(), new ArrayList<>());
 
-        // Assign type based moves, I hated doing this part
+        // Assign type based moves
         for (int i = 0; i < 3; i++) { // assign 3 moves
             int choice = random.nextInt(moveList.size());
-            if (moveList.get(choice).getType().equals(wildPokemon.getType()) || moveList.get(choice).getType().equals("Normal")) {
+            Move potentialMove = moveList.get(choice);
+            if (potentialMove.getType().equals(wildPokemon.getType()) || potentialMove.getType().equals("Normal") && !pokemon.getMoves().contains(potentialMove) ) {
                 pokemon.addMove(moveList.get(choice));
             }
             else {
