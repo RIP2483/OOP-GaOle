@@ -1,26 +1,40 @@
 import java.util.List;
 
 public class Pokemon {
+    private int id;
     private String name;
+    private String type;
     private int health;
-    private int maxHealth;
+    //private int maxHealth;
     private int attack;
     private int defense;
     private int speed;
+    private int grade;
     private List<Move> moves;
 
-    public Pokemon(String name, int health, int attack, int defense, int speed, List<Move> moves) {
+    public Pokemon(int id, String name, String type, int health, int attack, int defense, int speed, int grade,  List<Move> moves) {
+        this.id = id;
         this.name = name;
+        this.type = type;
         this.health = health;
-        this.maxHealth = health;
+        //this.maxHealth = health;
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
+        this.grade = grade;
         this.moves = moves;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public int getHealth() {
@@ -39,12 +53,24 @@ public class Pokemon {
         return speed;
     }
 
+    public int getGrade() {
+        return grade;
+    }
+
     public List<Move> getMoves() {
         return moves;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setHealth(int health) {
@@ -63,6 +89,10 @@ public class Pokemon {
         this.speed = speed;
     }
 
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
     public void setMoves(List<Move> moves) {
         this.moves = moves;
     }
@@ -74,9 +104,9 @@ public class Pokemon {
         }
     }
 
-    public void heal() {
-        health = maxHealth;
-    }
+    //public void heal() {
+    //    health = maxHealth;
+    //}
 
     public boolean isFainted() {
         return health <= 0;
