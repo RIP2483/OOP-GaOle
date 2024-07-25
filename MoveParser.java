@@ -9,7 +9,8 @@ public class MoveParser {
         for (String[] row : data) {
             String moveName = row[0];
             int damage = Integer.parseInt(row[1]);
-            moveList.add(new Move(moveName, damage));
+            String type = row[2];
+            moveList.add(new Move(moveName, damage, type));
         }
         return moveList;
     }
